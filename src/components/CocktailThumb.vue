@@ -5,45 +5,42 @@ const props = defineProps({
     required: true,
   },
 })
+
 </script>
 
 <template>
   <div class="container">
-    <RouterLink :to="`/cocktails/${cocktail.idDrink}`">
-    <div
-      :style="`background-image: url(${cocktail.strDrinkThumb})`"
-      class="pictures"
-    ></div>
+    <RouterLink :to="`/cocktail/${cocktail.idDrink}`">
+      <div
+        :style="`background-image: url(${cocktail.strDrinkThumb})`"
+        class="pictures"
+      ></div>
+
+      <div class="name">{{ cocktail.strDrink }}</div>
     </RouterLink>
-    <div class="name">{{ cocktail.strDrink }}</div>
   </div>
 </template>
-
 
 
 <style lang="sass" scoped>
 @import '../assets/styles/main'
 
 .container
-    width: calc( (100% - 80px) / 3 )
-    padding-right: 40px
-    margin-bottom: 20px
-
-    &:nth-child(3n + 3)
-        padding-right: 0
+  margin-bottom: 30px
 
 .pictures
-    width: 120px
-    height: 120px
-    margin: 0 auto
-    background-repeat: no-repeat
-    background-position: 50% 50%
-    background-size: 100%
+  width: 150px
+  height: 150px
+  margin: 0 auto
+  background-repeat: no-repeat
+  background-position: 50% 50%
+  background-size: 100%
 
 .name
-    padding-top: 15px
-    letter-spacing: 0.1em
-    max-width: 120px
-    text-align: center
-    margin: auto
+  padding-top: 10px
+  letter-spacing: 0.1em
+  margin: auto
+  white-space: nowrap
+  overflow: hidden
+  text-overflow: ellipsis
 </style>

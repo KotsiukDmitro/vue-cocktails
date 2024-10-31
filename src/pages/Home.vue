@@ -1,5 +1,4 @@
 <script setup>
-import { ref } from 'vue'
 import AppLayout from '@/components/AppLayout.vue'
 import CocktailThumb from '@/components/CocktailThumb.vue'
 import { useMainStore } from '@/stores/main'
@@ -7,22 +6,29 @@ import { storeToRefs } from 'pinia'
 
 const mainStore = useMainStore()
 mainStore.getIngredients()
-const { ingredients, cocktails } = storeToRefs(mainStore)
+const { ingredients, cocktails, ingredient } = storeToRefs(mainStore)
 
-const ingredient = ref(null)
+const getCocktails = ()=> {
+  mainStore.getCocktails(mainStore.ingredient)
+}
 
-const getCocktails = () => mainStore.getCocktails(ingredient.value)
+const removeIngredient = ()=> {
+  mainStore.setIngredient(null)
+}
+
 </script>
 
 <template>
-  <AppLayout imgUrl="/src/assets/image/bg-main.jpg">
+  <AppLayout imgUrl="/src/assets/image/bg-main.jpg" :backFn="removeIngredient" :isButtonBackVisible="!!ingredient">
     <div class="wrapper">
       <div v-if="!ingredient || !cocktails" class="info">
         <div class="title">Choose your drink</div>
         <div class="line"></div>
         <div class="select-wrap">
           <el-select
-            v-model="ingredient"
+            v-model="mainStore.ingredient"
+            filterable
+            allow-create
             placeholder="choose main ingredient"
             size="large"
             class="select"
@@ -60,36 +66,26 @@ const getCocktails = () => mainStore.getCocktails(ingredient.value)
 <style lang="sass" scoped>
 @import '../assets/styles/main'
 
-.wrapper
-  display: flex
-  align-items: center
-  justify-content: center
+.select-wrap
+  padding-top: 50px
 
-  .info
-    padding: 80px 0
-    text-align: center
+.select
+  width: 250px
 
-  .select-wrap
-    padding-top: 50px
+.text
+  max-width: 520px
+  text-align: center
+  margin-top: 50px
+  margin-bottom: 60px
+  line-height: 36px
+  letter-spacing: 0.1em
+  color: $textMuted
 
-  .select
-    width: 250px
-
-  .text
-    max-width: 520px
-    text-align: center
-    margin-top: 50px
-    margin-bottom: 60px
-    line-height: 36px
-    letter-spacing: 0.1em
-    color: $textMuted
-
-  .cocktails
-    display: flex 
-    flex-wrap: wrap
-    align-items: center
-    justify-content: center
-    margin-top: 60px
-    max-height: 500px
-    overflow-y: auto
+.cocktails
+  margin-top: 60px
+  max-height: 500px
+  overflow-y: auto
+  display: grid
+  grid-template-columns: repeat(3, minmax(0, 1fr))
+  gap: 30px
 </style>
