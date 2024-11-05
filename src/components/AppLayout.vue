@@ -1,5 +1,9 @@
 <script setup>
+import { useRoute, useRouter } from 'vue-router';
 import { Back } from '@element-plus/icons-vue'
+import { computed } from 'vue';
+import { ROUTES_PATHS } from '@/constants'
+
 
 const props = defineProps({
   imgUrl: {
@@ -8,13 +12,28 @@ const props = defineProps({
   },
   backFn: {
     type: Function,
-    required: true,
   },
   isButtonBackVisible: {
     type: Boolean,
     default: true,
   },
 })
+
+const route = useRoute()
+const router = useRouter()
+
+const routeName = computed(()=> route.name)
+
+const goForCocktailRandom = ()=> {
+  router.push(ROUTES_PATHS.COCKTAIL_RANDOM)
+  if (routeName.value === ROUTES_PATHS.COCKTAIL_RANDOM) {
+   router.go()
+  }
+}
+
+const goBack = () => {
+  props.backFn ? props.backFn() :  router.go(-1)
+}
 
 </script>
 
@@ -29,9 +48,9 @@ const props = defineProps({
           :icon="Back"
           circle
           class="btn-back"
-          @click="backFn"
+          @click="goBack"
         />
-        <el-button class="btn">Get random cocktail</el-button>
+        <el-button @click="goForCocktailRandom" class="btn">Get random cocktail</el-button>
       </div>
       <slot></slot>
     </div>
